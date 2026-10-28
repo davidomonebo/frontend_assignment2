@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yaba College of Technology | Student Login</title>
+  <style>
+    :root {
+      --green: #087443;
+      --green-dark: #075b35;
+      --gold: #f4bd36;
+      --ink: #17251f;
+      --muted: #66736c;
+      --line: #dce6df;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink); background: #f2f6f3;
+      display: grid; place-items: center; padding: 24px;
+    }
+    .page { width: min(100%, 980px); display: grid; grid-template-columns: 1fr 1fr;
+      background: white; border-radius: 22px; overflow: hidden;
+      box-shadow: 0 22px 65px rgba(20, 57, 38, .13); }
+    .welcome {
+      padding: 48px 42px; color: white; position: relative; overflow: hidden;
+      background: linear-gradient(145deg, #087443, #064c30);
+      display: flex; flex-direction: column; justify-content: space-between; min-height: 590px;
+    }
+    .welcome::before, .welcome::after {
+      content: ""; position: absolute; border: 1px solid rgba(255,255,255,.12);
+      border-radius: 50%; width: 330px; height: 330px; right: -150px; bottom: -90px;
+    }
+    .welcome::after { width: 230px; height: 230px; right: -100px; bottom: -40px; }
+    .brand { display: flex; align-items: center; gap: 13px; position: relative; z-index: 1; }
+    .crest { width: 54px; height: 54px; border-radius: 15px; display: grid; place-items: center;
+      background: white; color: var(--green); font-weight: 900; font-size: 17px; border: 3px solid var(--gold); }
+    .brand small { display: block; font-size: 10px; letter-spacing: 2px; opacity: .8; margin-bottom: 4px; }
+    .brand strong { font-size: 14px; line-height: 1.4; }
+    .welcome-copy { position: relative; z-index: 1; margin: 55px 0; }
+    .eyebrow { text-transform: uppercase; letter-spacing: 2.4px; color: #f8d77c; font-size: 11px; font-weight: bold; }
+    h1 { font-size: clamp(30px, 4vw, 43px); line-height: 1.13; margin: 17px 0; }
+    .welcome-copy p { max-width: 340px; color: rgba(255,255,255,.8); line-height: 1.7; font-size: 14px; }
+    .welcome-foot { position: relative; z-index: 1; font-size: 11px; color: rgba(255,255,255,.7); }
+    .login-panel { padding: 54px 48px; display: flex; flex-direction: column; justify-content: center; }
+    .mobile-brand { display: none; }
+    .form-heading { margin-bottom: 28px; }
+    .form-heading h2 { margin: 0 0 9px; font-size: 28px; }
+    .form-heading p { color: var(--muted); font-size: 13px; margin: 0; line-height: 1.6; }
+    label { display: block; margin: 19px 0 8px; font-size: 12px; font-weight: 700; }
+    .input-wrap { position: relative; }
+    input, select { width: 100%; padding: 14px 14px; border: 1px solid var(--line); border-radius: 9px;
+      background: #fbfdfb; font-size: 14px; outline: none; transition: .2s; color: var(--ink); }
+    input:focus, select:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(8,116,67,.1); }
+    .password-input { padding-right: 70px; }
+    .show-password { position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      background: none; border: 0; color: var(--green); cursor: pointer; font-size: 12px; font-weight: 700; }
+    .form-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 16px 0 22px; font-size: 12px; }
+    .remember { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+    .remember input { width: 14px; height: 14px; accent-color: var(--green); }
+    a { color: var(--green); text-decoration: none; font-weight: 700; }
+    a:hover { text-decoration: underline; }
+    .login-btn { border: 0; border-radius: 9px; background: var(--green); color: white; padding: 15px;
+      width: 100%; font-size: 14px; font-weight: 700; cursor: pointer; transition: .2s; }
+    .login-btn:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .login-btn:disabled { opacity: .7; cursor: wait; transform: none; }
+    .notice { display: none; margin-top: 16px; border-radius: 9px; padding: 12px; font-size: 12px; line-height: 1.5; }
+    .notice.show { display: block; }
+    .notice.error { background: #fff0ef; color: #a52b22; border: 1px solid #ffd5d1; }
+    .notice.success { background: #eaf8ef; color: #126238; border: 1px solid #c7ead2; }
+    .help { text-align: center; font-size: 12px; color: var(--muted); margin-top: 25px; line-height: 1.8; }
+    .security { border-top: 1px solid #edf1ee; margin-top: 28px; padding-top: 17px; color: #77837c; font-size: 10px; text-align: center; }
+    @media (max-width: 720px) {
+      body { padding: 14px; }
+      .page { grid-template-columns: 1fr; max-width: 440px; border-radius: 16px; }
+      .welcome { display: none; }
+      .login-panel { padding: 32px 25px; }
+      .mobile-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 32px; }
+      .mobile-brand .crest { background: var(--green); color: white; }
+      .mobile-brand strong { font-size: 12px; line-height: 1.5; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="welcome" aria-label="Welcome">
+      <div class="brand">
+        <div class="crest" aria-hidden="true">YCT</div>
+        <div><small>FEDERAL POLYTECHNIC</small><strong>YABA COLLEGE OF TECHNOLOGY</strong></div>
+      </div>
+      <div class="welcome-copy">
+        <div class="eyebrow">Student portal</div>
+        <h1>Your future<br>starts here.</h1>
+        <p>Sign in to access your student portal, academic information, and campus services.</p>
+      </div>
+      <div class="welcome-foot">Learning today. Leading tomorrow.</div>
+    </section>
+
+    <section class="login-panel">
+      <div class="mobile-brand">
+        <div class="crest" aria-hidden="true">YCT</div>
+        <strong>YABA COLLEGE<br>OF TECHNOLOGY</strong>
+      </div>
+      <div class="form-heading">
+        <h2>Welcome back</h2>
+        <p>Enter your details to sign in to your account.</p>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <label for="identity">Matric Number or Email</label>
+        <input id="identity" name="identity" type="text" placeholder="e.g. F/HD/25/0001" autocomplete="username" required>
+
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input class="password-input" id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required minlength="6">
+          <button class="show-password" id="togglePassword" type="button" aria-label="Show password">Show</button>
+        </div>
+
+        <div class="form-row">
+          <label class="remember" for="remember" style="margin:0;font-weight:400">
+            <input id="remember" type="checkbox"> Remember me
+          </label>
+          <a href="#" id="forgotLink">Forgot password?</a>
+        </div>
+
+        <button class="login-btn" id="loginButton" type="submit">Sign in</button>
+        <div class="notice" id="notice" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="help">Having trouble signing in?<br><a href="mailto:ict-support@yabatech.edu.ng">Contact portal support</a></div>
+      <div class="security">For your security, never share your password with anyone.</div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const password = document.getElementById('password');
+    const toggle = document.getElementById('togglePassword');
+    const notice = document.getElementById('notice');
+    const button = document.getElementById('loginButton');
+
+    function showNotice(message, type) {
+      notice.textContent = message;
+      notice.className = 'notice show ' + type;
+    }
+
+    toggle.addEventListener('click', () => {
+      const hidden = password.type === 'password';
+      password.type = hidden ? 'text' : 'password';
+      toggle.textContent = hidden ? 'Hide' : 'Show';
+      toggle.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const identity = document.getElementById('identity').value.trim();
+      const pass = password.value;
+
+      if (!identity || !pass) {
+        showNotice('Please enter your matric number/email and password.', 'error');
+        return;
+      }
+      if (pass.length < 6) {
+        showNotice('Your password must contain at least 6 characters.', 'error');
+        return;
+      }
+
+      // Demo only: connect this form to a secure server/authentication service for real login.
+      button.disabled = true;
+      button.textContent = 'Signing in…';
+      showNotice('Form validated. This demo is not connected to a real student account system.', 'success');
+      window.setTimeout(() => {
+        button.disabled = false;
+        button.textContent = 'Sign in';
+      }, 900);
+    });
+
+    document.getElementById('forgotLink').addEventListener('click', (event) => {
+      event.preventDefault();
+      showNotice('Please contact your school portal administrator to reset your password.', 'success');
+    });
+  </script>
+</body>
+</html>
